@@ -1,0 +1,104 @@
+-- ============================================================
+-- FICHIER : queries/all-queries.kql
+-- Projet  : Home SOC Lab — Microsoft Sentinel
+-- ============================================================
+
+-- ──────────────────────────────────────────
+-- 1. Tous les échecs de connexion (base)
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4625
+| project TimeGenerated, Account, IpAddress, LogonType, WorkstationName
+| order by TimeGenerated desc
+
+-- ──────────────────────────────────────────
+-- 2. Top attaquants par IP
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4625
+| summarize Attempts = count() by IpAddress
+| order by Attempts desc
+| render barchart
+
+-- ──────────────────────────────────────────
+-- 3. Top comptes ciblés
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4625
+| summarize Attempts = count() by TargetAccount
+| order by Attempts desc
+| take 10
+
+-- ──────────────────────────────────────────
+-- 4. Détection Password Spray
+-- (1 IP cible plusieurs comptes différents)
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4625
+| summarize
+    DistinctAccounts = dcount(Account),
+    TotalAttempts = count()
+    by IpAddress
+| where DistinctAccounts > 5
+| order by TotalAttempts desc
+
+-- ──────────────────────────────────────────
+-- 5. Détection Brute Force
+-- (beaucoup de tentatives sur 1 compte)
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4625
+| summarize FailedAttempts = count() by IpAddress, bin(TimeGenerated, 5m)
+| where FailedAttempts > 10
+| order by FailedAttempts desc
+
+-- ──────────────────────────────────────────
+-- 6. Enrichissement GeoIP complet
+-- ──────────────────────────────────────────
+let GeoIPDB = _GetWatchlist("geoip");
+SecurityEvent
+| where EventID == 4625
+| where IpAddress != "-"
+| evaluate ipv4_lookup(GeoIPDB, IpAddress, network)
+| summarize
+    Attacks = count(),
+    UniqueAccounts = dcount(Account),
+    FirstSeen = min(TimeGenerated),
+    LastSeen = max(TimeGenerated)
+    by country, city, IpAddress
+| order by Attacks desc
+
+-- ──────────────────────────────────────────
+-- 7. Stats par pays
+-- ──────────────────────────────────────────
+let GeoIPDB = _GetWatchlist("geoip");
+SecurityEvent
+| where EventID == 4625
+| where IpAddress != "-"
+| evaluate ipv4_lookup(GeoIPDB, IpAddress, network)
+| summarize AttackCount = count() by country
+| order by AttackCount desc
+| take 15
+| render piechart
+
+-- ──────────────────────────────────────────
+-- 8. Timeline d'une IP spécifique
+-- ──────────────────────────────────────────
+let TargetIP = "<remplacer par IP>";
+let GeoIPDB = _GetWatchlist("geoip");
+SecurityEvent
+| where EventID == 4625
+| where IpAddress == TargetIP
+| evaluate ipv4_lookup(GeoIPDB, IpAddress, network)
+| project TimeGenerated, Account, IpAddress, country, city, LogonType
+| order by TimeGenerated asc
+
+-- ──────────────────────────────────────────
+-- 9. Connexions réussies (Event 4624)
+-- (pour corréler avec les échecs)
+-- ──────────────────────────────────────────
+SecurityEvent
+| where EventID == 4624
+| where LogonType in (3, 10)
+| project TimeGenerated, Account, IpAddress, LogonType
+| order by TimeGenerated desc
