@@ -119,10 +119,6 @@ To verify logs were flowing correctly, we intentionally triggered failed login a
 
 **Inspecting in Event Viewer (EventID 4625):**
 
-![Event Viewer 4625](screenshots/03-eventviewer-4625.png)
-
-![Event Viewer list](screenshots/03b-eventviewer-4625-list.png)
-
 `Windows Logs → Security → Filter → EventID 4625` — every failed login attempt appears here with the source IP, targeted account, and timestamp.
 
 ---
