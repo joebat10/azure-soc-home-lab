@@ -117,8 +117,6 @@ To verify logs were flowing correctly, we intentionally triggered failed login a
 
 **Generating test failed logins:**
 
-![Generate test events](screenshots/02-generate-test-events.png)
-
 **Inspecting in Event Viewer (EventID 4625):**
 
 ![Event Viewer 4625](screenshots/03-eventviewer-4625.png)
