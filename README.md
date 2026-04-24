@@ -30,8 +30,8 @@ I measured security metrics in the insecure environment for **24 hours**, then a
 | NSG | `linux-vm-nsg` | Cloud firewall — Linux VM |
 | Log Analytics Workspace | `law-soc-lab` | Central log database |
 | Microsoft Sentinel | — | SIEM built on LAW |
-| Key Vault | `kv-soclab-joe` | Secret storage |
-| Storage Account | `stsocjoe` | Blob storage |
+| Key Vault | `kv-socxxxx` | Secret storage |
+| Storage Account | `stsocxxxx` | Blob storage |
 
 ---
 
