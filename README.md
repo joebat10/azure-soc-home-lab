@@ -259,7 +259,7 @@ Diagnostic setting `ds-storage-blob`: `StorageRead`, `StorageWrite`, `StorageDel
 
 ### Step 11 — GeoIP Watchlist
 
-Uploaded `geoip-summarized.csv` (~54,000 IP ranges with GPS coordinates) as a Sentinel Watchlist. This is used by all attack map workbooks to translate attacker IPs into countries on a world map.
+Uploaded [`data/geoip-summarized.csv`](data/geoip-summarized.csv) (~54,000 IP ranges with GPS coordinates) as a Sentinel Watchlist. This is used by all attack map workbooks to translate attacker IPs into countries on a world map.
 
 ![GeoIP download](screenshots/10-geoip-download.png)
 *Downloading the GeoIP CSV dataset — ~54,000 IP ranges mapped to countries and GPS coordinates, enabling Sentinel to plot every attacker IP on a world map.*
@@ -689,6 +689,8 @@ SecurityEvent | where EventID == 4625
 ```
 azure-soc-home-lab/
 ├── README.md
+├── data/
+│   └── geoip-summarized.csv
 ├── docs/
 ├── queries/
 │   └── all-queries.kql
