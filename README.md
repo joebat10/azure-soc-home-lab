@@ -676,11 +676,11 @@ SecurityEvent | where EventID == 4625
 
 | | |
 |---|---|
-| **Name** | [Your Name] |
+| **Name** | Joe Bichall |
 | **Programme** | Master's in Cybersecurity |
-| **LinkedIn** | [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile) |
+| **LinkedIn** | [linkedin.com/in/joe-bichall](https://linkedin.com/in/joe-bichall) |
 | **Email** | joebichall187@gmail.com |
-| **GitHub** | [github.com/your-username](https://github.com/your-username) |
+| **GitHub** | [github.com/joebat10](https://github.com/joebat10) |
 
 ---
 
